@@ -1,9 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
+
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-
+// cutcard때 폰트 설정이 없었음.
 ReactDOM.render(
   <React.StrictMode>
     <App />
