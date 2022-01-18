@@ -3,19 +3,25 @@ import { Request, Response } from 'express';
 import { getRepository } from 'typeorm';
 import { users } from '../../entity/users';
 import { generateToken } from '../jwt/GenerateToken';
+import dotenv from 'dotenv';
+dotenv.config();
 
 export default {
   token: async (req: Request, res: Response) => {
-    const URL = 'https://oauth2.googleapis.com/token';
     const code = req.body.authorizationCode;
-    const client_id =
-      '494275960739-1v9pnkndic9jo598ba3hsakpulfscu6a.apps.googleusercontent.com';
-    const client_secret = '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';
-    const redirect_uri = 'http://localhost:3000/oauth/google/callback';
+    const client_id = process.env.GOOGLE_CLIENT_ID;
+    const client_secret = process.env.GOOGLE_CLIENT_SECRET;
+    const redirect_uri = process.env.GOOGLE_REDIRECT_URI;
     const grant_type = 'authorization_code';
 
     await axios
-      .post(URL, { code, client_id, client_secret, redirect_uri, grant_type })
+      .post('https://oauth2.googleapis.com/token', {
+        code,
+        client_id,
+        client_secret,
+        redirect_uri,
+        grant_type,
+      })
       .then((response) => res.send(response.data));
   },
   getUserInfo: async (req: Request, res: Response) => {

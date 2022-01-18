@@ -3,12 +3,14 @@ import { Request, Response } from 'express';
 import { getRepository } from 'typeorm';
 import { users } from '../../entity/users';
 import { generateToken } from '../jwt/GenerateToken';
+import dotenv from 'dotenv';
+dotenv.config();
 
 export default {
   token: async (req: Request, res: Response) => {
     const code = req.body.authorizationCode;
-    const REST_API_KEY = 'b8665986f69d987ebb83449a6a9b06ba';
-    const REDIRECT_URI = 'http://localhost:3000/oauth/kakao/callback';
+    const REST_API_KEY = process.env.KAKAO_API_KEY;
+    const REDIRECT_URI = process.env.KAKAO_REDIRECT_URI;
 
     axios
       .post(
