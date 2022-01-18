@@ -185,7 +185,11 @@ function LoginModal() {
 
   const REST_API_KEY = 'b8665986f69d987ebb83449a6a9b06ba';
   const REDIRECT_URI = 'http://localhost:3000/oauth/kakao/callback';
+  const GOOGLE_URI = 'http://localhost:3000/oauth/google/callback';
+  const CLIENT_ID =
+    '494275960739-1v9pnkndic9jo598ba3hsakpulfscu6a.apps.googleusercontent.com';
   const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}&response_type=code`;
+  const GOOGLE_AUTH_URL = `https://accounts.google.com/o/oauth2/v2/auth?scope=openid&response_type=code&redirect_uri=${GOOGLE_URI}&client_id=${CLIENT_ID}`;
 
   return (
     <div css={modalBackgroundStyle}>
@@ -248,10 +252,12 @@ function LoginModal() {
               또는
             </div>
           </div>
-          <button css={[oauth]} onClick={naverLogin}>
-            <img css={oauthIcon} src={naverimg} alt="naver login" />
-            <div>네이버로 로그인하기</div>
-          </button>
+          <a href={GOOGLE_AUTH_URL}>
+            <button css={[oauth]} onClick={naverLogin}>
+              <img css={oauthIcon} src={naverimg} alt="naver login" />
+              <div>구글로 로그인하기</div>
+            </button>
+          </a>
           <a href={KAKAO_AUTH_URL}>
             <button css={[oauth, marginTop6]} onClick={kakaoLogin}>
               <img css={oauthIcon} src={kakaoimg} alt="naver login" />
