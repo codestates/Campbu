@@ -23,6 +23,7 @@ import {
   showAddressList,
   preView,
   imgFile,
+  post_id,
 } from '../Atom';
 import axios from 'axios';
 import SelectAddressList from '../components/SelectAddress';
@@ -202,17 +203,19 @@ const UploadImg = () => {
   );
 };
 
-export const Writing = () => {
+export const PostModify = () => {
   //전역상태
-  const unavailableDates = useRecoilValue(selectDate);
+  const [unavailableDates, setUnavailableDates] = useRecoilState(selectDate);
   const [address, setAddress] = useRecoilState(selectAddress);
   const setSerchAdress = useSetRecoilState(searchAddress);
   const [showAdress, setShowAdress] = useRecoilState(showAddressList);
   const imgUrls = useRecoilValue(preView);
+  const [postId, setPostId] = useRecoilState(post_id);
+
   //지역상태
   const [setCategory, setSetCategory] = useState<string>('');
-  const [deposit, setDeposit] = useState<string>('');
-  const [rentalFee, setRentalFee] = useState<string>('');
+  const [deposit, setDeposit] = useState<number>();
+  const [rentalFee, setRentalFee] = useState<number>();
   const [title, setTitle] = useState<string>('');
   const [content, setContent] = useState<string>('');
   const [reqState, setReqState] = useState<string>('ok');
@@ -221,11 +224,38 @@ export const Writing = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    setAddress('');
-    setSerchAdress([]);
-    setShowAdress(false);
-    setImageUrls([]);
-  }, []);
+    console.log('postId', postId);
+
+    if (postId) {
+      const API = `${host}/product/post/${postId}`;
+
+      axios
+        .get(API, config)
+        .then((res) => {
+          interface postInfoType {
+            address: string;
+            category: string;
+            contetnt: string;
+            title: string;
+            deposit: number;
+            rental_fee: number;
+            content: string;
+            img_urls: string[];
+            unavailable_dates: string[];
+          }
+          const postInfo: postInfoType = res.data.posts;
+          setTitle(postInfo.title);
+          setAddress(postInfo.address);
+          setSetCategory(postInfo.category);
+          setDeposit(postInfo.deposit);
+          setRentalFee(postInfo.rental_fee);
+          setContent(postInfo.content);
+          setImageUrls([...postInfo.img_urls]);
+          setUnavailableDates([...postInfo.unavailable_dates]);
+        })
+        .catch((err) => console.log(err));
+    }
+  }, [postId]);
 
   const category: string[] = [
     '카테고리를 입력하세요',
@@ -291,12 +321,12 @@ export const Writing = () => {
     }
   };
 
-  const wrightHandler = () => {
+  const modifyHandler = () => {
     interface postType {
       category: string;
-      deposit: number;
-      rental_fee: number;
-      unavailable_dates?: string[];
+      deposit: number | undefined;
+      rental_fee: number | undefined;
+      unavailable_dates: string[] | [];
       title: string;
       content: string;
       address: string;
@@ -305,8 +335,8 @@ export const Writing = () => {
 
     const data: postType = {
       category: setCategory,
-      deposit: Number(deposit),
-      rental_fee: Number(rentalFee),
+      deposit: deposit,
+      rental_fee: rentalFee,
       unavailable_dates: unavailableDates,
       title: title,
       content: content,
@@ -322,16 +352,32 @@ export const Writing = () => {
     if (!content) return setReqState('content');
     if (!imgUrls.length) return setReqState('imgUrls');
 
-    const API = `${host}/post/newpost`;
+    const API = `${host}/post/${postId}`;
     console.log('포스트 등록요청');
     axios
-      .post(API, data, config)
+      .patch(API, data, config)
       .then((res: any) => {
         if (res.status === 200) {
           setIsComplete(true);
+
+          setPostId(0);
         }
       })
       .catch((err) => console.log(err));
+  };
+
+  const deleteHandler = () => {
+    if (postId) {
+      const API = `${host}/product/post/${postId}`;
+      axios
+        .delete(API, config)
+        .then((res) => {
+          console.log(res.status);
+          setPostId(0);
+          navigate('/lists/resistlist');
+        })
+        .catch((err) => console.log(err));
+    }
   };
 
   return (
@@ -520,21 +566,35 @@ export const Writing = () => {
       <div css={[noticeNo, reqMsgStyle]}>{reqMsg[reqState]}</div>
       <div>
         <Button
-          text="등록"
+          text="수정"
           width={rem(97)}
           height={rem(40)}
           background={color.point}
           color={color.white}
           border="none"
           size={rem(14)}
-          onClick={wrightHandler}
+          onClick={modifyHandler}
+          margin="0 1rem"
+          cursor="pointer"
+          hover="0.85"
+        />
+        <Button
+          text="삭제"
+          width={rem(97)}
+          height={rem(40)}
+          background={color.placeholder}
+          color={color.white}
+          border="none"
+          size={rem(14)}
+          onClick={deleteHandler}
+          margin="0 1rem"
           cursor="pointer"
           hover="0.85"
         />
       </div>
       {isComplete ? (
         <Complete
-          text="물품이 등록되었습니다."
+          text="물품이 수정되었습니다."
           onClick={() => {
             navigate('/lists/resistlist');
           }}
@@ -544,4 +604,4 @@ export const Writing = () => {
   );
 };
 
-export default Writing;
+export default PostModify;

@@ -14,6 +14,7 @@ import ResistList from './pages/Lists/ResistList';
 import Chat from './pages/Lists/Chat';
 import GoogleLogin from './components/GoogleLogin';
 import KakaoLogin from './components/KakaoLogin';
+import PostModify from './pages/PostModify';
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
         <Route path="/main/*" element={<MainDetail />} />
         <Route path="/mypage" element={<Mypage />} />
         <Route path="/writing" element={<Writing />} />
+        <Route path="/writing/*" element={<PostModify />} />
         <Route path="/lists/borrowlist" element={<BorrowList />} />
         <Route path="/lists/lendlist" element={<LendList />} />
         <Route path="/lists/likelist" element={<LikeList />} />

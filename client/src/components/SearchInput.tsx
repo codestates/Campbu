@@ -14,6 +14,7 @@ interface Props {
   margin: string;
   onChange: (e: any) => void;
   value: string;
+  onKeyPress: (e: any) => void;
 }
 function SearchInput(props: Props) {
   const {
@@ -28,6 +29,7 @@ function SearchInput(props: Props) {
     margin,
     onChange,
     value,
+    onKeyPress,
   } = props;
   return (
     <input
@@ -58,6 +60,7 @@ function SearchInput(props: Props) {
       placeholder={text}
       onChange={onChange}
       value={value}
+      onKeyPress={onKeyPress}
     />
   );
 }

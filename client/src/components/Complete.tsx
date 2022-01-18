@@ -12,11 +12,12 @@ const box = css`
   border-radius: ${rem(15)};
   box-shadow: ${hover};
   z-index: 999;
+  top: 50%;
   left: 50%;
   display: flex;
   flex-direction: column;
   align-items: center;
-  transform: translate(-50%, 0);
+  transform: translate(-50%, -50%);
 `;
 
 const img = css`

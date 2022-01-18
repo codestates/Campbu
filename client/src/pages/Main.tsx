@@ -22,7 +22,7 @@ import {
 import { useEffect, useState } from 'react';
 import AlertModal from '../components/AlertModal';
 import axios from 'axios';
-import Loading from '../assets/Loading.svg';
+import Load from '../assets/Load.svg';
 import emptySearchResult from '../assets/pictures/emptySearchResult.svg';
 import { message } from './Lists/tab';
 import SelectAddressList from '../components/SelectAddress';
@@ -59,27 +59,14 @@ const addressListStyle = css`
   z-index: 990;
 `;
 
-const loadImg = keyframes`
-  0% {transform: rotate(30deg);}
-  8% {transform: rotate(60deg);}
-  16% {transform: rotate(90deg);}
-  24% {transform: rotate(120deg);}
-  32% {transform: rotate(150deg);}
-  40% {transform: rotate(180deg);}
-  48% {transform: rotate(210deg);}
-  56% {transform: rotate(240deg);}
-  64% {transform: rotate(270deg);}
-  72% {transform: rotate(300deg);}
-  80% {transform: rotate(330deg);}
-  88% {transform: rotate(0deg);}
+const loading = keyframes`
+  100% { transform: rotate(360deg); }
 `;
 
 const load = css`
-  margin: ${rem(26)} auto;
-  animation-name: ${loadImg};
-  animation-timing-function: linear;
-  animation-iteration-count: infinite;
-  animation-fill-mode: forwards;
+  margin: ${rem(100)} auto ${rem(200)} auto;
+  animation: ${loading} 6s linear infinite;
+  transform-origin: 50% 50%;
 `;
 
 export interface Posts {
@@ -98,7 +85,7 @@ export interface Post {
   longitude: number;
   latitude: number;
   address: string;
-  img_urls: string;
+  img_urls: string[];
   users_id: number;
   created_at?: string;
   updated_at?: string;
@@ -125,7 +112,7 @@ function Main() {
     setTimeout(() => {
       setIsLoading(false);
     }, 1000);
-  }, [selected]);
+  }, [products]);
 
   const onChange = (e: any) => {
     setSearchValue(e.target.value);
@@ -134,6 +121,7 @@ function Main() {
   const onSearchClick = async () => {
     getAddress();
     if (!showAddress && searchValue && selected) {
+      setIsLoading(true);
       if (login) {
         await axios
           .get(`${host}/product/address/${searchValue}`, config)
@@ -187,6 +175,12 @@ function Main() {
       });
   };
 
+  const onSearchPress = (e: any) => {
+    if (e.key === 'Enter') {
+      onSearchClick();
+    }
+  };
+
   return (
     <div css={container}>
       <Category />
@@ -204,6 +198,7 @@ function Main() {
           margin={`${rem(26)} 0 0 0`}
           onChange={onChange}
           value={searchValue}
+          onKeyPress={onSearchPress}
         />
         <button css={button} onClick={onSearchClick}>
           <img src={SearchGreen} alt="search" />
@@ -214,10 +209,10 @@ function Main() {
       </div>
       {loading ? (
         <div css={load}>
-          <img src={Loading} alt="loading..." />
+          <img src={Load} alt="loading..." />
         </div>
       ) : products['posts'].length === 0 ? (
-        <div style={{ marginTop: `${rem(26)}` }}>
+        <div style={{ margin: `${rem(80)} 0 ${rem(150)} 0` }}>
           <img src={emptySearchResult} alt="camping" />
           <p css={[message, `font-weight: 700`]}>
             검색 결과가 없어요! 다시 검색해주세요.
@@ -231,7 +226,7 @@ function Main() {
               count={product.likes_count}
               isFill={likedPosts.includes(product.id)}
               postId={product.id}
-              img_urls={product.img_urls}
+              img_urls={product.img_urls[0]}
               address={product.address}
               title={product.title}
               deposit={product.deposit}

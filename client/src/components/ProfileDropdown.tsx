@@ -2,8 +2,8 @@
 import { css } from '@emotion/react';
 import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
-import { useSetRecoilState } from 'recoil';
-import { isLogin } from '../Atom';
+import { useResetRecoilState, useSetRecoilState } from 'recoil';
+import { isLogin, loginUserInfo } from '../Atom';
 import { host, rem, shadow, textDecorationNone } from '../common';
 
 const box = css`
@@ -39,6 +39,7 @@ const line = css`
 function ProfileDropdown() {
   const setIsLogin = useSetRecoilState(isLogin);
   const navigate = useNavigate();
+  const resetLoginUserInfo = useResetRecoilState(loginUserInfo);
 
   const logout = () => {
     setIsLogin(false);
@@ -46,8 +47,9 @@ function ProfileDropdown() {
       .get(`${host}/user/logout`, { withCredentials: true })
       .then((res: any) => {
         console.log(res);
-        navigate('/');
         localStorage.removeItem('isLogin');
+        resetLoginUserInfo();
+        navigate('/');
       })
       .catch((err) => console.error(err));
   };
@@ -55,6 +57,9 @@ function ProfileDropdown() {
   return (
     <div css={box}>
       <ul css={ulStyle}>
+        <Link to="/lists/Chat" css={textDecorationNone}>
+          <li css={li}>메시지</li>
+        </Link>
         <Link to="/lists/borrowlist" css={textDecorationNone}>
           <li css={li}>빌린 목록</li>
         </Link>
@@ -66,9 +71,6 @@ function ProfileDropdown() {
         </Link>
         <Link to="/lists/resistlist" css={textDecorationNone}>
           <li css={li}>내가 쓴 글</li>
-        </Link>
-        <Link to="/lists/Chat" css={textDecorationNone}>
-          <li css={li}>채팅</li>
         </Link>
         <div css={line} />
         <Link to="mypage" css={textDecorationNone}>

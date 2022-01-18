@@ -51,7 +51,7 @@ function ResistList() {
       </nav>
       <div css={container}>
         {resistLists['post'].length === 0 ? (
-          <>
+          <div style={{ padding: `${rem(100)} 0` }}>
             <img src={emptyWriting} alt="broken heart" css={img} />
             <p css={message}>
               내가 쓴 글이 없어요!
@@ -69,11 +69,12 @@ function ResistList() {
               cursor={'pointer'}
               hover="80%"
             />
-          </>
+          </div>
         ) : (
           <section css={section}>
-            {resistLists['post'].map((resistList: MyPost) => (
+            {resistLists['post'].map((resistList: MyPost, index: number) => (
               <Product
+                key={index}
                 count={0} //? display: none
                 isFill={true} //? display: none
                 display="none"

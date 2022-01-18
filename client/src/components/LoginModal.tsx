@@ -13,7 +13,12 @@ import Input from './Input';
 import naverimg from '../assets/naver.png';
 import kakaoimg from '../assets/kakao.png';
 import { useSetRecoilState } from 'recoil';
-import { isLogin, showLoginModal, showSignupModal } from '../Atom';
+import {
+  isLogin,
+  loginUserInfo,
+  showLoginModal,
+  showSignupModal,
+} from '../Atom';
 import { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
@@ -116,7 +121,8 @@ function LoginModal() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [reqMsgState, setReqMsgState] = useState('ok');
-  const navigate = useNavigate();
+
+  const setLoginUserInfo = useSetRecoilState(loginUserInfo);
 
   const emailHandler = (e: any) => {
     setEmail(e.target.value);
@@ -129,6 +135,7 @@ function LoginModal() {
   interface reqMsgType {
     [key: string]: string;
   }
+
   const reqMsg: reqMsgType = {
     ok: '',
     email: '* 이메일을 입력해주세요.',
@@ -162,7 +169,18 @@ function LoginModal() {
           console.log('로그인성공');
           setShowLogin(false);
           setIsLogin(true);
-          navigate('/');
+          interface loginUserInfoType {
+            created_at: string;
+            email: string;
+            id: number;
+            nickname: string;
+            updated_at: string;
+            users_img: string;
+          }
+
+          const userinfo: loginUserInfoType = res.data;
+          setLoginUserInfo(userinfo);
+
           localStorage.setItem('isLogin', 'true');
         }
       })
@@ -170,6 +188,12 @@ function LoginModal() {
         console.log(res);
         setReqMsgState('conflict');
       });
+  };
+
+  const onLoginPress = (e: any) => {
+    if (e.key === 'Enter') {
+      loginHandler();
+    }
   };
 
   const kakaoLogin = () => {
@@ -183,7 +207,7 @@ function LoginModal() {
     console.log('네이버로그인요청');
   };
 
-  const REST_API_KEY = 'b8665986f69d987ebb83449a6a9b06ba';
+  const REST_API_KEY = '743967a98f800a0d61397559fbf5ad5f';
   const REDIRECT_URI = 'http://localhost:3000/oauth/kakao/callback';
   const GOOGLE_URI = 'http://localhost:3000/oauth/google/callback';
   const CLIENT_ID =
@@ -219,6 +243,7 @@ function LoginModal() {
               onChange={passwordHandler}
               value={password}
               type="password"
+              onKeyPress={onLoginPress}
             />
           </div>
           <div css={reqMsgStyle}>

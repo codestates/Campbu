@@ -3,7 +3,7 @@ import Reservation from '../../components/Reservation';
 import { css } from '@emotion/react';
 import { color, rem, flex, host, config } from '../../common';
 import ListTab from '../../components/ListTab';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { link, visit } from './tab';
 import { Button } from '../../components/Button';
 import emptyBorrow from '../../assets/pictures/emptyBorrow.svg';
@@ -61,6 +61,7 @@ function BorrowList() {
   const [reservationId, setReservationId] = useState(0);
   const [reservationStatus, setReservationStatus] = useState(0);
   const [userId, setUserId] = useState(0);
+
   const printStatusText = (status: number) => button[status - 1];
 
   const onButtonClick = (id: number, status: number, userId: number) => {
@@ -77,8 +78,17 @@ function BorrowList() {
     }
   };
 
-  const onReviewCompleteClick = () => {
+  const onReviewCompleteClick = async () => {
     setSubmit(false);
+    await axios
+      .get(`${host}/userinfo/product/borrow`, config)
+      .then((res) => {
+        const sortedData = res.data['borrow'].sort(
+          (a: any, b: any) => b.reservation_id - a.reservation_id,
+        );
+        setBorrowLists({ borrow: sortedData });
+      })
+      .catch((err) => console.error(err));
   };
 
   useEffect(() => {
@@ -146,7 +156,7 @@ function BorrowList() {
           />
         )}
         {borrowLists['borrow'].length === 0 ? (
-          <>
+          <div style={{ padding: `${rem(100)} 0` }}>
             <img src={emptyBorrow} alt="camping" />
             <p css={message}>
               빌린 목록이 없어요! <br />
@@ -163,7 +173,7 @@ function BorrowList() {
               cursor={'pointer'}
               hover="80%"
             />
-          </>
+          </div>
         ) : (
           <section css={section}>
             {borrowLists['borrow'].map((borrowList: List, index: number) => (

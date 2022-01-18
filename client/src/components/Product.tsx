@@ -17,7 +17,7 @@ import {
   addressStyle,
   moneyTitle,
 } from './post';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import { isLogin, post_id, showLoginModal, showSignupModal } from '../Atom';
@@ -49,8 +49,10 @@ function Product(props: Props) {
   } = props;
 
   const setGetPostId = useSetRecoilState(post_id);
+  const navigation = useNavigate();
   const onPostClick = () => {
     setGetPostId(postId);
+    navigation(`/main/${postId}`);
   };
 
   return (
@@ -74,11 +76,7 @@ function Product(props: Props) {
           display={display}
         />
       </div>
-      <Link
-        to={`/main/${postId}`}
-        css={textDecorationNone}
-        onClick={onPostClick}
-      >
+      <div css={textDecorationNone} onClick={onPostClick}>
         <img src={img_urls} alt="product" css={img} />
         <div css={textContainer}>
           <span css={[span, moneyTitle, addressStyle]}>
@@ -97,7 +95,7 @@ function Product(props: Props) {
             </span>
           </div>
         </div>
-      </Link>
+      </div>
     </div>
   );
 }

@@ -55,7 +55,7 @@ function LikeList() {
       </nav>
       <div css={container}>
         {likeLists['like'].length === 0 ? (
-          <>
+          <div style={{ padding: `${rem(50)} 0 ${rem(100)} 0` }}>
             <img src={emptyHeart} alt="broken heart" css={img} />
             <p css={message}>
               찜한 목록이 없어요! <br />
@@ -72,11 +72,12 @@ function LikeList() {
               cursor={'pointer'}
               hover="80%"
             />
-          </>
+          </div>
         ) : (
           <section css={section}>
-            {likeLists['like'].map((likeList: LikePost) => (
+            {likeLists['like'].map((likeList: LikePost, index: number) => (
               <Product
+                key={index}
                 count={likeList.likes_count}
                 isFill={true}
                 postId={likeList.id}

@@ -33,7 +33,12 @@ export default {
       .where('users_reviews.users_id = :users_id', { users_id: userId })
       .getRawMany();
 
-    if (reviews === undefined || reviews === null) {
+    if (req.cookies.jwt) {
+      const decoded = await authorizeToken(req, res);
+      const userRepository = await getRepository(users);
+      const user = userRepository.findOne({ email: decoded.email });
+      res.status(200).json({ posts: post, reviews, user });
+    } else if (reviews === undefined || reviews === null) {
       res.status(200).json({ posts: post, reviews: [] });
     } else {
       res.status(200).json({ posts: post, reviews });

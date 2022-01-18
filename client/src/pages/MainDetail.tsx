@@ -20,7 +20,7 @@ import BackButton from '../components/BackButton';
 import { Button } from '../components/Button';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Calendar from '../components/CalendarForLender';
 import Here from '../assets/Here.svg';
 import { span, addressStyle, moneyTitle } from '../components/post';
@@ -30,14 +30,17 @@ import {
   isLogin,
   isSelectStart,
   likedProducts,
+  loginUserInfo,
   post_id,
   profileImgUrl,
   selectDate,
   showCalendar,
+  showCompleteModal,
   showLoginModal,
   startDate,
   unableDate,
 } from '../Atom';
+import Complete from '../components/Complete';
 
 const width = css`
   width: ${rem(752)};
@@ -140,25 +143,16 @@ let dummyData = {
     category: 'Tent',
     deposit: 30000,
     rental_fee: 20000,
-    unavailable_dates: [
-      '2021.12.20',
-      '2021.12.21',
-      '2021.12.22',
-      '2022.01.23',
-      '2022.01.15',
-      '2022.01.01',
-    ],
-    title: '3~4인용 텐트 빌려드려요',
-    content: '쉽게 설치할 수 있는 3~4인용 텐트입니다.',
+    unavailable_dates: [],
+    title: '',
+    content: '',
     longitude: 126.99597295767953,
     latitude: 35.97664845766847,
-    address: '서울특별시 동작구 신대방동',
-    img_urls: [
-      'https://paperbarkcamp.com.au/wp-content/uploads/2019/07/paperbark_flash-camp_news_1218x650.jpg',
-    ],
+    address: '',
+    img_urls: [],
     users_id: 1,
-    created_at: '2021-12-16T09:42:40.000Z',
-    updated_at: '2021-12-16T09:42:40.000Z',
+    created_at: '',
+    updated_at: '',
     likes_count: 5,
   },
   reviews: [
@@ -197,6 +191,9 @@ interface postInfoType {
     | [];
 }
 
+// interface DetailviewType {
+//   postId: number;
+// }
 function DetailView() {
   //전역
   const setUnableDates = useSetRecoilState(unableDate);
@@ -211,21 +208,26 @@ function DetailView() {
   const login = useRecoilValue(isLogin);
   const setShowLoginModal = useSetRecoilState(showLoginModal);
   const profileImg = useRecoilValue(profileImgUrl);
+  const userInfo = useRecoilValue(loginUserInfo);
 
-  //지역
+  const userInfo = useRecoilValue(loginUserInfo);
+
+  const [completeModal, setCompleteModal] = useRecoilState(showCompleteModal);
+
   const [getReviews, setGetReviews] = useState<reviewsType>([]);
   const [postInfo, setPostInfo] = useState<postInfoType>(dummyData);
   const [selectImgNum, setSelectImgNum] = useState<number>(0);
 
+  console.log('userinfo', userInfo);
+  console.log('postinfo', postInfo);
   useEffect(() => {
-    const getData = async () => {
-      const API = `${host}/product/post/${postId}`;
-      const Config = {
-        headers: { 'Content-Type': 'application/json' },
-      };
+    console.log('postId', postId);
 
-      await axios
-        .get(API, Config)
+    if (postId) {
+      const API = `${host}/product/post/${postId}`;
+
+      axios
+        .get(API, config)
         .then((res) => {
           const postInfo = res.data;
           setPostInfo(postInfo);
@@ -242,9 +244,7 @@ function DetailView() {
           setGetReviews(tempReviews);
         })
         .catch((err) => console.log(err));
-    };
-
-    getData();
+    }
   }, [postId]);
 
   console.log(new Date(), postInfo);
@@ -266,10 +266,12 @@ function DetailView() {
         reservation_dates: totalRentalDates,
       };
       if (start && end) {
-        console.log('reservation data', data);
         axios
           .post(API, data, config)
-          .then((res) => console.log(res.data))
+          .then((res) => {
+            console.log(res.data);
+            setCompleteModal(true);
+          })
           .catch((err) => console.log(err));
       } else {
         console.log('대여일,반납일을 선택하세요');
@@ -297,8 +299,15 @@ function DetailView() {
     }
   };
 
+  const reservationComplete = () => {
+    setCompleteModal(false);
+  };
+
   return (
     <div css={flexVertical}>
+      {completeModal && (
+        <Complete text="예약이 완료되었습니다" onClick={reservationComplete} />
+      )}
       <div css={flexVertical}>
         <div
           css={css`
@@ -325,6 +334,26 @@ function DetailView() {
               {postInfo.posts.address}
             </span>
             <div>{postInfo.posts.title}</div>
+          </div>
+          <div
+            css={css`
+              padding-left: 20rem;
+            `}
+          >
+            <Link to={`/writing/${postId}`}>
+              <Button
+                text="수정하기 / 삭제하기"
+                width={rem(150)}
+                height={`none`}
+                background={color.white}
+                color={color.placeholder}
+                border="none"
+                size={rem(18)}
+                margin={`none`}
+                hover="0.65"
+                cursor="pointer"
+              />
+            </Link>
           </div>
           <LikeSymbol
             postId={postId}
@@ -430,6 +459,7 @@ function DetailView() {
         </div>
         <div
           css={[
+            flexVertical,
             css`
               margin-top: ${rem(30)};
             `,
@@ -440,6 +470,7 @@ function DetailView() {
               css={[
                 flexBetween,
                 css`
+                  width: ${rem(280)};
                   align-items: flex-end;
                   justify-content: flex-end;
                   margin-bottom: ${rem(10)};
@@ -579,6 +610,8 @@ function DetailView() {
               size={rem(14)}
               margin={`${rem(10)} 0`}
               onClick={reservationHandler}
+              hover="0.85"
+              cursor="pointer"
             />
           </div>
         </div>

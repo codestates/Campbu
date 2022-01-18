@@ -170,6 +170,12 @@ function Intro() {
       });
   };
 
+  const onSearchPress = (e: any) => {
+    if (e.key === 'Enter') {
+      onSearchClick();
+    }
+  };
+
   return (
     <div css={divStyle}>
       <img src={background} alt="뒷배경" css={img} />
@@ -188,6 +194,7 @@ function Intro() {
           margin={`${rem(62)} 0 0 0`}
           onChange={onChange}
           value={searchValue}
+          onKeyPress={onSearchPress}
         />
         <button css={button} onClick={onSearchClick}>
           <img src={Search} alt="search" />

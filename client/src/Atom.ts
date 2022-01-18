@@ -6,6 +6,11 @@ export const isLogin = atom({
   default: false,
 });
 
+export const loginUserInfo = atom({
+  key: 'loginUserInfo',
+  default: {},
+});
+
 export const profileImgUrl = atom({
   key: 'profileImgUrl',
   default:
@@ -28,8 +33,9 @@ export const originalPosts = atom({
         longitude: 126.99597295767953,
         latitude: 35.97664845766847,
         address: '서울특별시 동작구 신대방동',
-        img_urls:
+        img_urls: [
           'https://paperbarkcamp.com.au/wp-content/uploads/2019/07/paperbark_flash-camp_news_1218x650.jpg',
+        ],
         users_id: 1,
         likes_count: 15,
       },
@@ -44,8 +50,9 @@ export const originalPosts = atom({
         longitude: 126.99597295767953,
         latitude: 35.97664845766847,
         address: '서울특별시 동작구 신대방동',
-        img_urls:
+        img_urls: [
           'https://paperbarkcamp.com.au/wp-content/uploads/2019/07/paperbark_flash-camp_news_1218x650.jpg',
+        ],
         users_id: 1,
         likes_count: 15,
       },
@@ -69,8 +76,9 @@ export const posts = atom({
         longitude: 126.99597295767953,
         latitude: 35.97664845766847,
         address: '서울특별시 동작구 신대방동',
-        img_urls:
+        img_urls: [
           'https://paperbarkcamp.com.au/wp-content/uploads/2019/07/paperbark_flash-camp_news_1218x650.jpg',
+        ],
         users_id: 1,
         likes_count: 15,
       },
@@ -85,8 +93,9 @@ export const posts = atom({
         longitude: 126.99597295767953,
         latitude: 35.97664845766847,
         address: '서울특별시 동작구 신대방동',
-        img_urls:
+        img_urls: [
           'https://paperbarkcamp.com.au/wp-content/uploads/2019/07/paperbark_flash-camp_news_1218x650.jpg',
+        ],
         users_id: 1,
         likes_count: 15,
       },
@@ -130,7 +139,7 @@ export const showConfirmModal = atom({
   default: false,
 });
 
-//? 대여 확인 모달 : ㅇㅇ가 완료되었습니다.
+//? 완료 모달 : ㅇㅇ가 완료되었습니다.
 export const showCompleteModal = atom({
   key: 'showCompleteModal',
   default: false,

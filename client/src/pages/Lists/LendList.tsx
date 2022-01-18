@@ -82,8 +82,17 @@ function LendList() {
     }
   };
 
-  const onReviewCompleteClick = () => {
+  const onReviewCompleteClick = async () => {
     setSubmit(false);
+    await axios
+      .get(`${host}/userinfo/product/lend`, config)
+      .then((res) => {
+        const sortedData = res.data['lend'].sort(
+          (a: any, b: any) => b.reservation_id - a.reservation_id,
+        );
+        setLendLists({ lend: sortedData });
+      })
+      .catch((err) => console.error(err));
   };
 
   useEffect(() => {
@@ -151,7 +160,7 @@ function LendList() {
           />
         )}
         {lendLists['lend'].length === 0 ? (
-          <>
+          <div style={{ padding: `${rem(100)} 0` }}>
             <img src={emptyLend} alt="camping" />
             <p css={message}>
               빌려준 목록이 없어요! <br />
@@ -166,7 +175,7 @@ function LendList() {
               border={`1px solid ${color.mid}`}
               size={`${rem(14)}`}
             />
-          </>
+          </div>
         ) : (
           <section css={section}>
             {lendLists['lend'].map((lendList: List, index: number) => (
