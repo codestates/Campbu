@@ -270,6 +270,7 @@ function Mypage() {
       .then((res: any) => {
         console.log(res.status);
         localStorage.removeItem('isLogin');
+        localStorage.removeItem('userInfo');
         axios
           .delete(API, config)
           .then((res) => {

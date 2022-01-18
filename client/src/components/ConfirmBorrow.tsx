@@ -16,7 +16,8 @@ const box = css`
   box-shadow: ${shadow};
   z-index: 999;
   left: 50%;
-  transform: translate(-50%, 0);
+  top: 50%;
+  transform: translate(-50%, -50%);
   text-align: left;
 `;
 

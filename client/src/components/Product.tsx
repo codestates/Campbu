@@ -52,6 +52,7 @@ function Product(props: Props) {
   const navigation = useNavigate();
   const onPostClick = () => {
     setGetPostId(postId);
+    localStorage.setItem('postId', `${postId}`);
     navigation(`/main/${postId}`);
   };
 
@@ -77,7 +78,7 @@ function Product(props: Props) {
         />
       </div>
       <div css={textDecorationNone} onClick={onPostClick}>
-        <img src={img_urls} alt="product" css={img} />
+        <img src={img_urls} alt="product" css={img} draggable="false" />
         <div css={textContainer}>
           <span css={[span, moneyTitle, addressStyle]}>
             <img src={Here} alt="위치" style={{ marginRight: '4px' }} />

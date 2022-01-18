@@ -48,11 +48,12 @@ function Reservation(props: Props) {
   } = props;
 
   const length = reservation_dates.length;
+  const thumbnail = img_urls.split(',');
 
   return (
     <div css={post}>
       <Link to={`/main/${postId}`} css={textDecorationNone}>
-        <img src={img_urls} alt="product" css={img} />
+        <img src={thumbnail[0]} alt="product" css={img} />
         <div css={textContainer}>
           <span css={[span, moneyTitle, addressStyle]}>
             <img src={Here} alt="위치" style={{ marginRight: '4px' }} />

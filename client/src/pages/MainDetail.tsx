@@ -48,6 +48,7 @@ const width = css`
 const moneyContent = css`
   width: ${rem(230)};
   margin-top: ${rem(16)};
+  font-size: ${rem(14)};
 `;
 const productImg = css`
   width: ${rem(752)};
@@ -63,11 +64,11 @@ const reviewAlign = css`
   flex-wrap: wrap;
 `;
 const feeView = css`
-  border: 1px solid ${color.border};
   border-radius: ${rem(10)};
   width: ${rem(280)};
   font-size: ${rem(11)};
   margin-top: ${rem(50)};
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
 `;
 
 const selectDateStyle = css`
@@ -79,7 +80,7 @@ const selectDateStyle = css`
   transition: 0.3s;
   :hover {
     cursor: pointer;
-    background-color: ${color.border};
+    background-color: '#f0f0f0';
   }
   :active {
     opacity: 0.5;
@@ -87,13 +88,22 @@ const selectDateStyle = css`
 `;
 
 const fontSize9 = css`
-  font-size: ${rem(9)};
+  font-size: ${rem(12)};
   font-weight: 700;
 `;
-const fontSize40 = css`
+const arrowStyle = css`
+  width: ${rem(60)};
   font-size: ${rem(40)};
-  margin: 0 ${rem(20)};
+  text-align: center;
+  padding: auto;
   color: ${color.border};
+  :hover {
+    font-size: ${rem(50)};
+    cursor: pointer;
+  }
+  :active {
+    opacity: 0.6;
+  }
 `;
 
 const showSelectImgContainerStyle = css`
@@ -153,7 +163,7 @@ let dummyData = {
     users_id: 1,
     created_at: '',
     updated_at: '',
-    likes_count: 5,
+    likes_count: 99,
   },
   reviews: [
     {
@@ -165,6 +175,12 @@ let dummyData = {
       reviews_id: 8,
     },
   ],
+  user: {
+    email: 'string',
+    id: 0,
+    nicknamge: 'string',
+    users_img: 'string',
+  },
 };
 
 interface postInfoType {
@@ -189,6 +205,12 @@ interface postInfoType {
         reviews_id: number;
       }[]
     | [];
+  user: {
+    email: string;
+    id: number;
+    nicknamge: string;
+    users_img: string;
+  };
 }
 
 // interface DetailviewType {
@@ -213,12 +235,9 @@ function DetailView() {
   const [getReviews, setGetReviews] = useState<reviewsType>([]);
   const [postInfo, setPostInfo] = useState<postInfoType>(dummyData);
   const [selectImgNum, setSelectImgNum] = useState<number>(0);
+  const navigation = useNavigate();
 
-  console.log('userinfo', userInfo);
-  console.log('postinfo', postInfo);
   useEffect(() => {
-    console.log('postId', postId);
-
     if (postId) {
       const API = `${host}/product/post/${postId}`;
 
@@ -226,6 +245,7 @@ function DetailView() {
         .get(API, config)
         .then((res) => {
           const postInfo = res.data;
+
           setPostInfo(postInfo);
 
           setUnableDates(postInfo.posts.unavailable_dates.sort());
@@ -243,7 +263,6 @@ function DetailView() {
     }
   }, [postId]);
 
-  console.log(new Date(), postInfo);
   const campbuIndicator = calCampbuIndicator(getReviews);
   const startDateHandler = () => {
     setIsSelectStartState(true);
@@ -297,10 +316,10 @@ function DetailView() {
 
   const reservationComplete = () => {
     setCompleteModal(false);
+    navigation('/lists/chat');
   };
-
   return (
-    <div css={flexVertical}>
+    <div css={[flexVertical, `margin-bottom: ${rem(100)}`]}>
       {completeModal && (
         <Complete text="예약이 완료되었습니다" onClick={reservationComplete} />
       )}
@@ -325,32 +344,36 @@ function DetailView() {
           ]}
         >
           <div>
-            <span css={[span, moneyTitle, addressStyle]}>
-              <img src={Here} alt="위치" style={{ marginRight: '4px' }} />
+            <div style={{ fontSize: `${rem(20)}`, marginBottom: `${rem(6)}` }}>
+              {postInfo.posts.title}
+            </div>
+            <span css={[span, moneyTitle, `font-size: ${rem(12)}`]}>
+              <img src={Here} alt="위치" style={{ marginRight: '2px' }} />
               {postInfo.posts.address}
             </span>
-            <div>{postInfo.posts.title}</div>
           </div>
-          <div
-            css={css`
-              padding-left: 20rem;
-            `}
-          >
-            <Link to={`/writing/${postId}`}>
-              <Button
-                text="수정하기 / 삭제하기"
-                width={rem(150)}
-                height={`none`}
-                background={color.white}
-                color={color.placeholder}
-                border="none"
-                size={rem(18)}
-                margin={`none`}
-                hover="0.65"
-                cursor="pointer"
-              />
-            </Link>
-          </div>
+          {userInfo.id === postInfo.user.id ? (
+            <div
+              css={css`
+                padding-left: 20rem;
+              `}
+            >
+              <Link to={`/writing/${postId}`}>
+                <Button
+                  text="수정하기 / 삭제하기"
+                  width={rem(150)}
+                  height={`none`}
+                  background={color.white}
+                  color={color.placeholder}
+                  border="none"
+                  size={rem(18)}
+                  margin={`none`}
+                  hover="0.65"
+                  cursor="pointer"
+                />
+              </Link>
+            </div>
+          ) : null}
           <LikeSymbol
             postId={postId}
             isFill={likedPosts.includes(postId)}
@@ -369,7 +392,7 @@ function DetailView() {
           ]}
         >
           <div
-            css={fontSize40}
+            css={arrowStyle}
             onClick={() => {
               selectImgHandler('pre');
             }}
@@ -383,6 +406,7 @@ function DetailView() {
             <div css={showSelectImgContainerStyle}>
               {postInfo.posts.img_urls.map((el, idx) => (
                 <div
+                  key={idx}
                   css={[
                     showSelectImgCircleStyle,
                     css`
@@ -396,7 +420,7 @@ function DetailView() {
             </div>
           </div>
           <div
-            css={fontSize40}
+            css={arrowStyle}
             onClick={() => {
               selectImgHandler('next');
             }}
@@ -485,7 +509,11 @@ function DetailView() {
                 <Gage ratio={campbuIndicator} width={153} />
               </div>
               <div css={profileBoxStyle}>
-                <img css={profileImgStyle} src={profileImg} alt="profileImg" />
+                <img
+                  css={profileImgStyle}
+                  src={postInfo.user.users_img}
+                  alt="profileImg"
+                />
               </div>
             </div>
             <div
@@ -527,7 +555,7 @@ function DetailView() {
                     border-right: 1px solid ${color.border};
                     background-color: ${isShowCalendar
                       ? isSelectStartState
-                        ? color.border
+                        ? '#f0f0f0'
                         : null
                       : null};
                   `,
@@ -545,7 +573,7 @@ function DetailView() {
                     background-color: ${isShowCalendar
                       ? isSelectStartState
                         ? null
-                        : color.border
+                        : '#f0f0f0'
                       : null};
                   `,
                 ]}
@@ -567,9 +595,11 @@ function DetailView() {
 
               {totalRentalDates.length > 0 ? (
                 <>
-                  <span>{`${postInfo.posts.rental_fee.toLocaleString(
-                    'ko-KR',
-                  )} × ${totalRentalDates.length}일`}</span>
+                  <span
+                    style={{ color: `#b8b8b8` }}
+                  >{`${postInfo.posts.rental_fee.toLocaleString('ko-KR')} × ${
+                    totalRentalDates.length
+                  }일`}</span>
                   <span>{` ${(
                     postInfo.posts.rental_fee * totalRentalDates.length
                   ).toLocaleString('ko-KR')} 원`}</span>
@@ -598,13 +628,13 @@ function DetailView() {
             </div>
             <Button
               text="예약하기"
-              width={rem(221)}
-              height={rem(36)}
+              width={rem(240)}
+              height={rem(40)}
               background={color.point}
               color={color.white}
               border="none"
               size={rem(14)}
-              margin={`${rem(10)} 0`}
+              margin={`${rem(10)} 0 ${rem(16)} 0`}
               onClick={reservationHandler}
               hover="0.85"
               cursor="pointer"

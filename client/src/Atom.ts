@@ -6,9 +6,14 @@ export const isLogin = atom({
   default: false,
 });
 
-export const loginUserInfo = atom({
+export const loginUserInfo = atom<{
+  email: string;
+  id: number;
+  nickname: string;
+  users_img: string;
+}>({
   key: 'loginUserInfo',
-  default: {},
+  default: { email: 'string', id: 0, nickname: 'string', users_img: 'string' },
 });
 
 export const profileImgUrl = atom({
@@ -27,32 +32,13 @@ export const originalPosts = atom({
         category: 'Tent',
         deposit: 30000,
         rental_fee: 25000,
-        unavailable_dates: ['2021.12.20', '2021.12.21', '2021.12.22'],
-        title: '테스트테스트1',
-        content: '쉽게 설치할 수 있는 3~4인용 텐트입니다.',
+        unavailable_dates: [''],
+        title: '',
+        content: '',
         longitude: 126.99597295767953,
         latitude: 35.97664845766847,
-        address: '서울특별시 동작구 신대방동',
-        img_urls: [
-          'https://paperbarkcamp.com.au/wp-content/uploads/2019/07/paperbark_flash-camp_news_1218x650.jpg',
-        ],
-        users_id: 1,
-        likes_count: 15,
-      },
-      {
-        id: 1,
-        category: 'Chair',
-        deposit: 30000,
-        rental_fee: 25000,
-        unavailable_dates: ['2021.12.20', '2021.12.21', '2021.12.22'],
-        title: '테스트테스트2',
-        content: '쉽게 설치할 수 있는 3~4인용 텐트입니다.',
-        longitude: 126.99597295767953,
-        latitude: 35.97664845766847,
-        address: '서울특별시 동작구 신대방동',
-        img_urls: [
-          'https://paperbarkcamp.com.au/wp-content/uploads/2019/07/paperbark_flash-camp_news_1218x650.jpg',
-        ],
+        address: '',
+        img_urls: [''],
         users_id: 1,
         likes_count: 15,
       },
@@ -70,32 +56,13 @@ export const posts = atom({
         category: 'Tent',
         deposit: 30000,
         rental_fee: 25000,
-        unavailable_dates: ['2021.12.20', '2021.12.21', '2021.12.22'],
-        title: '테스트테스트1',
-        content: '쉽게 설치할 수 있는 3~4인용 텐트입니다.',
+        unavailable_dates: [''],
+        title: '',
+        content: '',
         longitude: 126.99597295767953,
         latitude: 35.97664845766847,
-        address: '서울특별시 동작구 신대방동',
-        img_urls: [
-          'https://paperbarkcamp.com.au/wp-content/uploads/2019/07/paperbark_flash-camp_news_1218x650.jpg',
-        ],
-        users_id: 1,
-        likes_count: 15,
-      },
-      {
-        id: 1,
-        category: 'Chair',
-        deposit: 30000,
-        rental_fee: 25000,
-        unavailable_dates: ['2021.12.20', '2021.12.21', '2021.12.22'],
-        title: '테스트테스트2',
-        content: '쉽게 설치할 수 있는 3~4인용 텐트입니다.',
-        longitude: 126.99597295767953,
-        latitude: 35.97664845766847,
-        address: '서울특별시 동작구 신대방동',
-        img_urls: [
-          'https://paperbarkcamp.com.au/wp-content/uploads/2019/07/paperbark_flash-camp_news_1218x650.jpg',
-        ],
+        address: '',
+        img_urls: [''],
         users_id: 1,
         likes_count: 15,
       },
@@ -232,7 +199,13 @@ export const likedProducts = atom<number[]>({
 });
 
 //? 부재 중 온 채팅 개수 객체
-export const chatsTotalNum = atom<number>({
-  key: 'chatsTotalNum',
-  default: 0,
+interface chats {
+  [key: string]: number;
+}
+
+export const chatsNum = atom<chats>({
+  key: 'chatsNum',
+  default: {
+    total: 0,
+  },
 });

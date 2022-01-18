@@ -197,10 +197,16 @@ function Adate(props: AdateProps) {
   const today = `${thisYear}.${thisMonth}.${thisDate}`;
   const selectDateHandler = () => {
     const unableSelectEnd = unableDates.find((el) => el > start);
+    const unableSelectEnd2 = unableDates.find((el) => el > today);
     if (isUnable === -1) {
       if (isSelectStartState) {
         if (today >= end) {
           setEnd('');
+        }
+        if (unableSelectEnd2) {
+          if (end > unableSelectEnd2) {
+            setEnd('');
+          }
         }
         setStart(today);
         //end가 이미 있고, today end보다 작으면 대여 배열생성

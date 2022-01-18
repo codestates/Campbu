@@ -2,9 +2,10 @@
 import { css } from '@emotion/react';
 import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
-import { useResetRecoilState, useSetRecoilState } from 'recoil';
+import { useResetRecoilState, useSetRecoilState, useRecoilState } from 'recoil';
 import { isLogin, loginUserInfo } from '../Atom';
 import { host, rem, shadow, textDecorationNone } from '../common';
+import { chatsNum } from '../Atom';
 
 const box = css`
   width: ${rem(205)};
@@ -40,6 +41,7 @@ function ProfileDropdown() {
   const setIsLogin = useSetRecoilState(isLogin);
   const navigate = useNavigate();
   const resetLoginUserInfo = useResetRecoilState(loginUserInfo);
+  const [chatNum, setChatNum] = useRecoilState(chatsNum);
 
   const logout = () => {
     setIsLogin(false);
@@ -48,6 +50,7 @@ function ProfileDropdown() {
       .then((res: any) => {
         console.log(res);
         localStorage.removeItem('isLogin');
+        localStorage.removeItem('userInfo');
         resetLoginUserInfo();
         navigate('/');
       })
@@ -57,8 +60,37 @@ function ProfileDropdown() {
   return (
     <div css={box}>
       <ul css={ulStyle}>
-        <Link to="/lists/Chat" css={textDecorationNone}>
-          <li css={li}>메시지</li>
+        <Link to="/lists/chat" css={textDecorationNone}>
+          <li
+            css={[
+              li,
+              css`
+                display: flex;
+              `,
+            ]}
+          >
+            메시지
+            {chatNum.total !== 0 ? (
+              <div
+                css={[
+                  css`
+                    width: ${rem(25)};
+                    height: ${rem(25)};
+                    border-radius: 50%;
+                    border: ${rem(2)} solid #ed662c;
+                    text-align: center;
+                    margin-left: ${rem(10)};
+                    font-size: ${rem(15)};
+                    line-height: ${rem(20)};
+                  `,
+                ]}
+              >
+                {chatNum.total}
+              </div>
+            ) : (
+              <div></div>
+            )}
+          </li>
         </Link>
         <Link to="/lists/borrowlist" css={textDecorationNone}>
           <li css={li}>빌린 목록</li>

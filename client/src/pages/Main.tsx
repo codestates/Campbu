@@ -24,6 +24,7 @@ import AlertModal from '../components/AlertModal';
 import axios from 'axios';
 import Load from '../assets/Load.svg';
 import emptySearchResult from '../assets/pictures/emptySearchResult.svg';
+import Geolocation from '../assets/pictures/Geolocation.svg';
 import { message } from './Lists/tab';
 import SelectAddressList from '../components/SelectAddress';
 
@@ -31,7 +32,7 @@ const container = css`
   width: ${rem(1280)};
   margin: 0 auto;
   margin-top: ${rem(36)};
-  margin-bottom: ${rem(16)};
+  margin-bottom: ${rem(100)};
   text-align: center;
 `;
 
@@ -104,56 +105,59 @@ function Main() {
   const [selected, setSelected] = useState<boolean>(false);
   const [likedPosts, setLikedPosts] = useRecoilState<number[]>(likedProducts);
 
-  useEffect(() => {
-    setSearchValue('');
-  }, []);
+  const [address, setAddress] = useState('');
 
   useEffect(() => {
-    setTimeout(() => {
-      setIsLoading(false);
-    }, 1000);
-  }, [products]);
-
-  const onChange = (e: any) => {
-    setSearchValue(e.target.value);
-  };
-
-  const onSearchClick = async () => {
-    getAddress();
-    if (!showAddress && searchValue && selected) {
+    if (searchValue) {
       setIsLoading(true);
       if (login) {
-        await axios
+        axios
           .get(`${host}/product/address/${searchValue}`, config)
           .then((res) => {
             if (res.status === 200) {
+              console.log(`${host}/product/address/${searchValue}`, res.data);
               searchAddressList(res.data);
               setMainSearch(res.data);
               const likes = res.data['likes'].map(
                 (obj: { posts_id: number }) => obj.posts_id,
               );
               setLikedPosts(likes);
+              setIsLoading(false);
             }
           })
-          .catch((err) => console.error('에러입니다', err));
+          .catch((err) => {
+            console.error('검색결과가 없습니다.', err);
+            setIsLoading(false);
+          });
       } else {
-        await axios
+        axios
           .get(`${host}/product/address/${searchValue}`)
           .then((res) => {
             if (res.status === 200) {
               searchAddressList(res.data);
               setMainSearch(res.data);
+              setIsLoading(false);
             }
           })
-          .catch((err) => console.error('에러입니다', err));
+          .catch((err) => {
+            console.error('검색결과가 없습니다.', err);
+            setIsLoading(false);
+          });
       }
     }
+    if (searchValue) {
+      setAddress(searchValue);
+    }
+  }, [searchValue]);
+
+  const onChange = (e: any) => {
+    setAddress(e.target.value);
   };
 
-  const getAddress = async () => {
+  const onSearchClick = async () => {
     await axios
       .get(
-        `https://www.juso.go.kr/addrlink/addrLinkApi.do?currentPage=1&countPerPage=50&keyword=${searchValue}&confmKey=${addressAPI}&resultType=json`,
+        `https://www.juso.go.kr/addrlink/addrLinkApi.do?currentPage=1&countPerPage=50&keyword=${address}&confmKey=${addressAPI}&resultType=json`,
         { headers: { 'Content-Type': 'application/json' } },
       )
       .then((res) => {
@@ -171,7 +175,7 @@ function Main() {
         }
         setSearchAddress(addressList);
         setShowAddress(true);
-        setSelected(true);
+        setSearchValue('');
       });
   };
 
@@ -197,7 +201,7 @@ function Main() {
           padding={`${rem(18)}`}
           margin={`${rem(26)} 0 0 0`}
           onChange={onChange}
-          value={searchValue}
+          value={address}
           onKeyPress={onSearchPress}
         />
         <button css={button} onClick={onSearchClick}>
@@ -216,6 +220,13 @@ function Main() {
           <img src={emptySearchResult} alt="camping" />
           <p css={[message, `font-weight: 700`]}>
             검색 결과가 없어요! 다시 검색해주세요.
+          </p>
+        </div>
+      ) : products.posts[0].title === '' ? (
+        <div style={{ margin: `${rem(80)} 0 ${rem(150)} 0` }}>
+          <img src={Geolocation} alt="please search" />
+          <p css={[message, `font-weight: 700`]}>
+            검색된 게 없어요, 지역을 검색해주세요!
           </p>
         </div>
       ) : (

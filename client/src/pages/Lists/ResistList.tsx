@@ -58,17 +58,19 @@ function ResistList() {
               <br />
               캠핑 용품이 있다면 대여 게시글을 올려보세요!
             </p>
-            <Button
-              text="글 쓰러 가기"
-              width={`${rem(180)}`}
-              height={`${rem(43)}`}
-              background="white"
-              color={`${color.mid}`}
-              border={`1px solid ${color.mid}`}
-              size={`${rem(14)}`}
-              cursor={'pointer'}
-              hover="80%"
-            />
+            <Link to="/writing">
+              <Button
+                text="글 쓰러 가기"
+                width={`${rem(180)}`}
+                height={`${rem(43)}`}
+                background="white"
+                color={`${color.mid}`}
+                border={`1px solid ${color.mid}`}
+                size={`${rem(14)}`}
+                cursor={'pointer'}
+                hover="80%"
+              />
+            </Link>
           </div>
         ) : (
           <section css={section}>

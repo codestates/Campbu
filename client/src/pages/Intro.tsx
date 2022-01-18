@@ -105,48 +105,8 @@ function Intro() {
     setSearchValue(e.target.value);
   };
 
-  const onSearchClick = async () => {
-    if (searchValue.length !== 0) {
-      getAddress();
-      if (!showAddress && searchValue && selected) {
-        setIsLoading(true);
-        if (login) {
-          await axios
-            .get(`${host}/product/address/${searchValue}`, config)
-            .then((res) => {
-              if (res.status === 200) {
-                searchAddressList(res.data);
-                setMainSearch(res.data);
-                const likes = res.data['likes'].map(
-                  (obj: { posts_id: number }) => obj.posts_id,
-                );
-                setLikedPosts(likes);
-                navigation('/main');
-              }
-            })
-            .catch((err) => console.error('에러입니다', err));
-        } else {
-          await axios
-            .get(`${host}/product/address/${searchValue}`)
-            .then((res) => {
-              if (res.status === 200) {
-                searchAddressList(res.data);
-                setMainSearch(res.data);
-                navigation('/main');
-              }
-            })
-            .catch((err) => console.error('에러입니다', err));
-        }
-        setSearchAddress([]);
-        setShowAddress(false);
-      }
-    } else {
-      setShowModal(true);
-    }
-  };
-
-  const getAddress = async () => {
-    await axios
+  const onSearchClick = () => {
+    axios
       .get(
         `https://www.juso.go.kr/addrlink/addrLinkApi.do?currentPage=1&countPerPage=50&keyword=${searchValue}&confmKey=${addressAPI}&resultType=json`,
         { headers: { 'Content-Type': 'application/json' } },
@@ -166,7 +126,6 @@ function Intro() {
         }
         setSearchAddress(addressList);
         setShowAddress(true);
-        setSelected(true);
       });
   };
 
@@ -201,7 +160,7 @@ function Intro() {
         </button>
       </span>
       <div css={addressListStyle}>
-        {showAddress && <SelectAddressList width={600} />}
+        {showAddress ? <SelectAddressList width={600} barogagi={true} /> : null}
       </div>
     </div>
   );

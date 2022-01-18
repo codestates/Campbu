@@ -27,6 +27,9 @@ const visit = css`
   :visited {
     color: ${color.deep};
   }
+  :active {
+    color: ${color.deep};
+  }
 `;
 
 const ulStyle = css`

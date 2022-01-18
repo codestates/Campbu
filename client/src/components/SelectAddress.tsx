@@ -1,5 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
+import { useNavigate } from 'react-router-dom';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { searchAddress, selectAddress, showAddressList } from '../Atom';
 import { color, rem, shadow } from '../common';
@@ -26,14 +27,20 @@ const fontSize14 = css`
   font-size: 0.875rem;
 `;
 
-interface Style {
+interface SelectAddressListPropsType {
   width?: number;
+  barogagi?: boolean;
 }
 
-export default function SelectAddressList({ width }: Style) {
+export default function SelectAddressList({
+  width,
+  barogagi,
+}: SelectAddressListPropsType) {
   const setSelectAddress = useSetRecoilState(selectAddress);
   const setSearchAddress = useSetRecoilState(searchAddress);
   const setShowAddress = useSetRecoilState(showAddressList);
+
+  const navigate = useNavigate();
 
   const selectAddressHandler = (e: any) => {
     setSelectAddress(e.target.textContent);
@@ -41,6 +48,13 @@ export default function SelectAddressList({ width }: Style) {
     setShowAddress(false);
   };
 
+  const selectAddressGoHandler = (e: any) => {
+    setSelectAddress(e.target.textContent);
+    setSearchAddress([]);
+    setShowAddress(false);
+    navigate(`/main`);
+    // setSelectAddress('');
+  };
   const addressList = useRecoilValue(searchAddress);
   return (
     <div
@@ -59,11 +73,22 @@ export default function SelectAddressList({ width }: Style) {
           검색 결과가 없습니다.
         </div>
       )}
-      {addressList.map((el, idx) => (
-        <div key={idx} css={contentStyle} onClick={selectAddressHandler}>
-          {el}
-        </div>
-      ))}
+      <div
+        css={css`
+          max-height: 13.5rem;
+          overflow: scroll;
+        `}
+      >
+        {addressList.map((el, idx) => (
+          <div
+            key={idx}
+            css={contentStyle}
+            onClick={barogagi ? selectAddressGoHandler : selectAddressHandler}
+          >
+            {el}
+          </div>
+        ))}
+      </div>
     </div>
   );
 }

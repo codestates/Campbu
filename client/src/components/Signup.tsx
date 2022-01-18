@@ -173,8 +173,6 @@ function Signup() {
         .get(`${host}/user/signup?nickname=${nickname}`)
         .then((res) => {
           if (res.status === 200) {
-            console.log(`API ${host}/user/signup?nickname=${nickname}`);
-            console.log('닉네임 사용가능', setNickDupliacte(true));
           }
         })
         .catch((err) => {

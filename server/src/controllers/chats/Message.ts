@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { chats } from '../../entity/chats';
 import { reservation } from '../../entity/reservation';
+import { posts } from '../../entity/posts';
 import { getRepository } from 'typeorm';
 
 export = async (req: Request, res: Response) => {
@@ -25,5 +26,12 @@ export = async (req: Request, res: Response) => {
     .where('reservation.id = :id', { id: chat.reservation_id })
     .getOne();
 
-  res.status(200).json({ chat: chat.chat, post });
+  const postRepository = getRepository(posts);
+  const userId = await postRepository
+    .createQueryBuilder('post')
+    .select('users_id')
+    .where('post.id = :id', { id: post?.posts_id.id })
+    .getRawOne();
+
+  res.status(200).json({ chat: chat.chat, post, userId });
 };

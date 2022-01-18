@@ -24,6 +24,7 @@ import {
   preView,
   imgFile,
   post_id,
+  loginUserInfo,
 } from '../Atom';
 import axios from 'axios';
 import SelectAddressList from '../components/SelectAddress';
@@ -211,6 +212,8 @@ export const PostModify = () => {
   const [showAdress, setShowAdress] = useRecoilState(showAddressList);
   const imgUrls = useRecoilValue(preView);
   const [postId, setPostId] = useRecoilState(post_id);
+  const userInfo = useRecoilValue(loginUserInfo);
+  const setImageUrls = useSetRecoilState(preView);
 
   //지역상태
   const [setCategory, setSetCategory] = useState<string>('');
@@ -220,8 +223,10 @@ export const PostModify = () => {
   const [content, setContent] = useState<string>('');
   const [reqState, setReqState] = useState<string>('ok');
   const [isComplete, setIsComplete] = useState(false);
-  const setImageUrls = useSetRecoilState(preView);
+  const [postUserId, setPostUserId] = useState<number>(0);
   const navigate = useNavigate();
+
+  console.log(userInfo.id === postUserId);
 
   useEffect(() => {
     console.log('postId', postId);
@@ -243,6 +248,8 @@ export const PostModify = () => {
             img_urls: string[];
             unavailable_dates: string[];
           }
+          console.log(res.data);
+          setPostUserId(res.data.user.id);
           const postInfo: postInfoType = res.data.posts;
           setTitle(postInfo.title);
           setAddress(postInfo.address);
@@ -353,21 +360,21 @@ export const PostModify = () => {
     if (!imgUrls.length) return setReqState('imgUrls');
 
     const API = `${host}/post/${postId}`;
-    console.log('포스트 등록요청');
-    axios
-      .patch(API, data, config)
-      .then((res: any) => {
-        if (res.status === 200) {
-          setIsComplete(true);
-
-          setPostId(0);
-        }
-      })
-      .catch((err) => console.log(err));
+    if (postId && userInfo.id === postUserId) {
+      axios
+        .patch(API, data, config)
+        .then((res: any) => {
+          if (res.status === 200) {
+            setIsComplete(true);
+            setPostId(0);
+          }
+        })
+        .catch((err) => console.log(err));
+    }
   };
 
   const deleteHandler = () => {
-    if (postId) {
+    if (postId && userInfo.id === postUserId) {
       const API = `${host}/product/post/${postId}`;
       axios
         .delete(API, config)

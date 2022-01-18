@@ -31,7 +31,7 @@ function App() {
         <Route path="/lists/lendlist" element={<LendList />} />
         <Route path="/lists/likelist" element={<LikeList />} />
         <Route path="/lists/resistlist" element={<ResistList />} />
-        <Route path="/lists/Chat" element={<Chat />} />
+        <Route path="/lists/chat" element={<Chat />} />
         <Route path="/oauth/kakao/callback" element={<KakaoLogin />} />
         <Route path="/oauth/google/callback" element={<GoogleLogin />} />
       </Routes>

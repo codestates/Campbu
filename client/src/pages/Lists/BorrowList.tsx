@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import Reservation from '../../components/Reservation';
-import { css } from '@emotion/react';
+import { css, keyframes } from '@emotion/react';
 import { color, rem, flex, host, config } from '../../common';
 import ListTab from '../../components/ListTab';
 import { Link, useNavigate } from 'react-router-dom';
@@ -10,6 +10,7 @@ import emptyBorrow from '../../assets/pictures/emptyBorrow.svg';
 import { container, section, message } from './tab';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import {
+  isLoading,
   showCompleteModal,
   showConfirmModal,
   showReviewModal,
@@ -21,6 +22,7 @@ import axios from 'axios';
 import Complete from '../../components/Complete';
 import ReviewModal from '../../components/ReviewModal';
 import { List } from './interface';
+import Load from '../../assets/Load.svg';
 
 interface Borrow {
   borrow: List[];
@@ -30,22 +32,21 @@ const borrows = {
   borrow: [
     {
       reservation_id: 1,
-      reservation_reservation_dates: ['2022.01.15', '2022.01.16', '2022.01.17'],
+      reservation_reservation_dates: [''],
       reservation_reservation_status: 1,
       reservation_users_id: 2,
       reservation_posts_id: 2,
       posts_id: 2,
-      posts_category: '의자/테이블',
+      posts_category: '',
       posts_deposit: 20000,
       posts_rental_fee: 40000,
-      posts_unavailable_dates: ['2022.01.11', '2022.01.12', '2022.01.13'],
-      posts_title: '튼튼한 의자 빌려드려요',
-      posts_content: '올라가도 안 부서집니다.',
-      posts_longitude: '127.044484819305',
-      posts_latitude: '37.2244311943994',
-      posts_address: '화성시 기산동',
-      posts_img_urls:
-        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ98OT7JgUOpLY1IN0cPBLYfEDTisFUCKLrZw&usqp=CAU',
+      posts_unavailable_dates: [''],
+      posts_title: '',
+      posts_content: '',
+      posts_longitude: '',
+      posts_latitude: '',
+      posts_address: '',
+      posts_img_urls: '',
       posts_users_id: 1,
     },
   ],
@@ -61,7 +62,7 @@ function BorrowList() {
   const [reservationId, setReservationId] = useState(0);
   const [reservationStatus, setReservationStatus] = useState(0);
   const [userId, setUserId] = useState(0);
-
+  const [loading, setIsLoading] = useRecoilState(isLoading);
   const printStatusText = (status: number) => button[status - 1];
 
   const onButtonClick = (id: number, status: number, userId: number) => {
@@ -92,15 +93,20 @@ function BorrowList() {
   };
 
   useEffect(() => {
-    axios
-      .get(`${host}/userinfo/product/borrow`, config)
-      .then((res) => {
-        const sortedData = res.data['borrow'].sort(
-          (a: any, b: any) => b.reservation_id - a.reservation_id,
-        );
-        setBorrowLists({ borrow: sortedData });
-      })
-      .catch((err) => console.error(err));
+    setIsLoading(true);
+    const load = async () => {
+      await axios
+        .get(`${host}/userinfo/product/borrow`, config)
+        .then((res) => {
+          const sortedData = res.data['borrow'].sort(
+            (a: any, b: any) => b.reservation_id - a.reservation_id,
+          );
+          setBorrowLists({ borrow: sortedData });
+          setIsLoading(false);
+        })
+        .catch((err) => console.error(err));
+    };
+    load();
   }, []);
 
   return (
@@ -155,7 +161,11 @@ function BorrowList() {
             onClick={onReviewCompleteClick}
           />
         )}
-        {borrowLists['borrow'].length === 0 ? (
+        {loading ? (
+          <div css={load}>
+            <img src={Load} alt="loading..." />
+          </div>
+        ) : borrowLists['borrow'].length === 0 ? (
           <div style={{ padding: `${rem(100)} 0` }}>
             <img src={emptyBorrow} alt="camping" />
             <p css={message}>
@@ -228,5 +238,15 @@ function BorrowList() {
     </>
   );
 }
+
+const loading = keyframes`
+  100% { transform: rotate(360deg); }
+`;
+
+const load = css`
+  margin: ${rem(100)} auto ${rem(200)} auto;
+  animation: ${loading} 6s linear infinite;
+  transform-origin: 50% 50%;
+`;
 
 export default BorrowList;
