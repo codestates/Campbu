@@ -22,7 +22,6 @@ import {
 import { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import KakaoLogin from './KakaoLogin';
 
 const backgroundStyle = css`
   background-color: white;
@@ -207,13 +206,8 @@ function LoginModal() {
     console.log('네이버로그인요청');
   };
 
-  const REST_API_KEY = '743967a98f800a0d61397559fbf5ad5f';
-  const REDIRECT_URI = 'http://localhost:3000/oauth/kakao/callback';
-  const GOOGLE_URI = 'http://localhost:3000/oauth/google/callback';
-  const CLIENT_ID =
-    '494275960739-1v9pnkndic9jo598ba3hsakpulfscu6a.apps.googleusercontent.com';
-  const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}&response_type=code`;
-  const GOOGLE_AUTH_URL = `https://accounts.google.com/o/oauth2/v2/auth?scope=openid&response_type=code&redirect_uri=${GOOGLE_URI}&client_id=${CLIENT_ID}`;
+  const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${process.env.REACT_APP_KAKAO_CLIENT_ID}&redirect_uri=${process.env.REACT_APP_KAKAO_REDIRECT_URI}&response_type=code`;
+  const GOOGLE_AUTH_URL = `https://accounts.google.com/o/oauth2/v2/auth?scope=openid%20https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email%20https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile%20&response_type=code&redirect_uri=${process.env.REACT_APP_GOOGLE_REDIRECT_URI}&client_id=${process.env.REACT_APP_GOOGLE_CLIENT_ID}`;
 
   return (
     <div css={modalBackgroundStyle}>

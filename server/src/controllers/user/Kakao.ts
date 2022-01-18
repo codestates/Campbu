@@ -26,7 +26,10 @@ export default {
 
     axios
       .get('https://kapi.kakao.com/v2/user/me', {
-        headers: { authorization: `Bearer ${token} ` },
+        headers: {
+          authorization: `Bearer ${token} `,
+          'Content-type': 'application/x-www-form-urlencoded;charset=utf-8',
+        },
       })
       .then(async (response) => {
         const usersRepository = getRepository(users);
@@ -45,10 +48,13 @@ export default {
             users_img: users_img,
           });
           const accessToken = await generateToken(email);
+          const userInfo = await usersRepository.findOne({
+            email: email,
+          });
           return res
             .status(201)
             .cookie('jwt', accessToken, { httpOnly: true })
-            .json({ message: 'Successfully Signup by Kakao Id' });
+            .json({ user: userInfo });
         } else {
           await usersRepository.update(
             {
@@ -57,10 +63,13 @@ export default {
             { nickname: nickname, users_img: users_img },
           );
           const accessToken = await generateToken(email);
+          const userInfo = await usersRepository.findOne({
+            email: email,
+          });
           return res
             .status(200)
             .cookie('jwt', accessToken, { httpOnly: true })
-            .json({ message: 'Successfully Signin by Kakao Id' });
+            .json({ user: userInfo });
         }
       });
   },
