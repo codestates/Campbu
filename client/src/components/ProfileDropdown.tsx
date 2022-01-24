@@ -54,6 +54,7 @@ function ProfileDropdown() {
   const resetLikedPosts = useResetRecoilState(likedProducts);
   const resetIsNavOn = useResetRecoilState(navbarOn);
   const resetToken = useResetRecoilState(jwtToken);
+  const resetChatNum = useResetRecoilState(chatsNum);
 
   const logout = () => {
     setIsLogin(false);
@@ -63,9 +64,11 @@ function ProfileDropdown() {
         localStorage.removeItem('isLogin');
         localStorage.removeItem('userInfo');
         localStorage.removeItem('token');
+        localStorage.removeItem('chatNum');
         resetLoginUserInfo();
         resetLikedPosts();
         resetToken();
+        resetChatNum();
         navigate('/');
       })
       .catch((err) => console.error(err));

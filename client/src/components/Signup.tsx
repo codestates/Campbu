@@ -192,6 +192,7 @@ function Signup() {
 
       axios.get(`${host}/user/signup?email=${email}`).then((res) => {
         if (res.status === 200) {
+          setEmailDupliacte(true);
         } else {
           setEmailDupliacte(false);
         }
