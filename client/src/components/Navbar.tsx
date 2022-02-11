@@ -104,11 +104,18 @@ function Navbar() {
 
   useEffect(() => {
     if (mesId !== chatRoomId && roomId !== '' && mesId !== undefined) {
+      const newChat = {
+        ...chatNum,
+        total: chatNum.total + 1,
+        [roomId]: chatNum[roomId] + 1,
+      };
       setChatNum((chatNum) => ({
         ...chatNum,
         total: chatNum.total + 1,
         [roomId]: chatNum[roomId] + 1,
       }));
+      const chatsNum = JSON.stringify(newChat);
+      localStorage.setItem('chatNum', chatsNum);
     }
   }, [mesDate]);
 
@@ -125,6 +132,13 @@ function Navbar() {
     setMesId(message.id);
     setMesDate(message.date);
   });
+
+  useEffect(() => {
+    const isChatsNum = localStorage.getItem('chatNum');
+    if (isChatsNum) {
+      setChatNum(JSON.parse(isChatsNum));
+    }
+  }, [setChatNum]);
 
   return (
     <header css={headerStyle}>

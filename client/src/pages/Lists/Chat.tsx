@@ -285,11 +285,18 @@ function Chat() {
     if (chatRoomId !== id) {
       const clickRoomId = `Room${id}`;
       if (chatCount[clickRoomId]) {
+        const newChat = {
+          ...chatCount,
+          [clickRoomId]: 0,
+          total: chatCount.total - chatCount[clickRoomId],
+        };
         setChatCount((chatCount) => ({
           ...chatCount,
           [clickRoomId]: 0,
           total: chatCount.total - chatCount[clickRoomId],
         }));
+        const chatsNum = JSON.stringify(newChat);
+        localStorage.setItem('chatNum', chatsNum);
       }
       setChatRoomId(id);
       setChatNickName(nickName);

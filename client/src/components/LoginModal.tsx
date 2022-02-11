@@ -207,10 +207,16 @@ function LoginModal() {
               const chatIds = res.data.chat.map((chat: any) => {
                 const roomId = 'Room' + String(chat.id);
                 if (!(roomId in chatNum)) {
+                  const newChat = {
+                    ...chatNum,
+                    [roomId]: 0,
+                  };
                   setChatNum((chatNum) => ({
                     ...chatNum,
                     [roomId]: 0,
                   }));
+                  const chatsNum = JSON.stringify(newChat);
+                  localStorage.setItem('chatNum', chatsNum);
                 }
                 return chat.id;
               });
