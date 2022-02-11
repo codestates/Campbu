@@ -93,10 +93,9 @@ export const reviews: { id: number; review: string }[] = [
   { id: 12, review: '욕설 등의 비매너' },
 ];
 
+
 export const host = 'https://campbuserver.cf';
-// 'http://localhost:5050';
-// 'http://ec2-54-180-154-138.ap-northeast-2.compute.amazonaws.com';
-//주소요청 API
+
 export const addressAPI = `U01TX0FVVEgyMDIyMDExMDIxMjMzNTExMjExNzA=`;
 
 export type reviewsType = {
@@ -150,8 +149,8 @@ export function deleteS3Img(url: string) {
   const key = divUrl[divUrl.length - 1];
   s3.deleteObject(
     {
-      Bucket: bucketName, // 사용자 버켓 이름
-      Key: key, // 버켓 내 경로
+      Bucket: bucketName,
+      Key: key,
     },
     (err, data) => {
       if (err) {

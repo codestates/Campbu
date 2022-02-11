@@ -238,6 +238,7 @@ function Mypage() {
         .then((res) => {
           if (res.status === 200) {
             setReqState('ok');
+            setNickDupliacte(true);
           }
         })
         .catch((err) => {

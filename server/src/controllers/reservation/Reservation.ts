@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import { getRepository } from 'typeorm';
 import { reservation } from '../../entity/reservation';
 import { posts } from '../../entity/posts';
-import { users } from '../../entity/users';
+import users from '../../entity/users';
 import { chats } from '../../entity/chats';
 import { authorizeToken } from '../jwt/AuthorizeToken';
 

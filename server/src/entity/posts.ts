@@ -10,7 +10,7 @@ import {
 } from 'typeorm';
 import { likes } from './likes';
 import { reservation } from './reservation';
-import { users } from './users';
+import users from './users';
 
 @Entity()
 export class posts {

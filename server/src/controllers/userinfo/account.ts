@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { createQueryBuilder, getRepository } from 'typeorm';
-import { users } from '../../entity/users';
+import users from '../../entity/users';
 import { authorizeToken } from '../jwt/AuthorizeToken';
 
 export default {

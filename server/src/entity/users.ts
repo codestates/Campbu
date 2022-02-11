@@ -13,7 +13,7 @@ import { users_reviews } from './users_reviews';
 import { chats } from './chats';
 
 @Entity()
-export class users {
+export default class users {
   @PrimaryGeneratedColumn()
   id: number;
 

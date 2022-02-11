@@ -1,6 +1,14 @@
-import 'reflect-metadata';
-import { createConnection, getRepository } from 'typeorm';
-import { reviews } from './entity/reviews';
+import "reflect-metadata";
+import express from "express";
+import cors from "cors";
+import cookieParser from "cookie-parser";
+import router from "./routes/index";
+import { createConnection } from "typeorm";
+import http from "http";
+
+const app = express();
+export const server = http.createServer(app);
+const port = 5050;
 
 createConnection()
   .then(async (connection) => {
@@ -18,6 +26,6 @@ createConnection()
       { content: '실제와 다른 상품 설명' },
       { content: '느린 답장 및 지각' },
       { content: '욕설 등의 비매너' },
-    ]);
-  })
-  .catch((error) => console.log(error));
+  ]);
+})
+.catch((error) => console.log(error));

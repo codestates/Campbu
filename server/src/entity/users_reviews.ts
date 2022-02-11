@@ -8,7 +8,7 @@ import {
   JoinColumn,
 } from 'typeorm';
 import { reviews } from './reviews';
-import { users } from './users';
+import users from './users';
 
 @Entity()
 export class users_reviews {

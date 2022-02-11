@@ -6,4 +6,4 @@ import Message from '../controllers/chats/Message';
 router.get('/chatRoom', ChatRoom);
 router.get('/message/:roomId', Message);
 
-export = router;
+export default router;

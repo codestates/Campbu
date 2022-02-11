@@ -160,9 +160,10 @@ function LendList() {
             onClick={onReviewCompleteClick}
           />
         )}
-        {lendLists['lend'][0]?.reservation_id === 0 ? (
+        {lendLists['lend'][0]?.reservation_id === 0 && (
           <div style={{ height: `${rem(1000)}` }} />
-        ) : lendLists['lend'].length === 0 ? (
+        )}
+        {lendLists['lend'].length === 0 && (
           <div style={{ padding: `${rem(100)} 0` }}>
             <img src={emptyLend} alt="camping" />
             <p css={message}>
@@ -181,52 +182,58 @@ function LendList() {
               />
             </Link>
           </div>
-        ) : (
-          <section css={section}>
-            {lendLists['lend'].map((lendList: List, index: number) => (
-              <Reservation
-                key={index}
-                text={printStatusText(lendList.reservation_reservation_status)}
-                background={
-                  lendList.reservation_reservation_status !== 4
-                    ? color.point
-                    : color.mid
-                }
-                color="white"
-                cursor={
-                  lendList.reservation_reservation_status === 1 ||
-                  lendList.reservation_reservation_status === 3
-                    ? 'pointer'
-                    : 'not-allowed'
-                }
-                hover={
-                  lendList.reservation_reservation_status === 4
-                    ? '100%'
-                    : lendList.reservation_reservation_status === 2
-                    ? '50%'
-                    : '80%'
-                }
-                opacity={
-                  lendList.reservation_reservation_status === 2 ? '50%' : '100%'
-                }
-                postId={lendList.posts_id}
-                img_urls={lendList.posts_img_urls.split(',')}
-                address={lendList.posts_address}
-                title={lendList.posts_title}
-                deposit={lendList.posts_deposit}
-                rental_fee={lendList.posts_rental_fee}
-                reservation_dates={lendList.reservation_reservation_dates}
-                onButtonClick={() =>
-                  onButtonClick(
-                    lendList.reservation_id,
-                    lendList.reservation_reservation_status,
-                    lendList.reservation_users_id,
-                  )
-                }
-              />
-            ))}
-          </section>
         )}
+        {lendLists.lend.length !== 0 &&
+          lendLists['lend'][0]?.reservation_id !== 0 && (
+            <section css={section}>
+              {lendLists['lend'].map((lendList: List, index: number) => (
+                <Reservation
+                  key={index}
+                  text={printStatusText(
+                    lendList.reservation_reservation_status,
+                  )}
+                  background={
+                    lendList.reservation_reservation_status !== 4
+                      ? color.point
+                      : color.mid
+                  }
+                  color="white"
+                  cursor={
+                    lendList.reservation_reservation_status === 1 ||
+                    lendList.reservation_reservation_status === 3
+                      ? 'pointer'
+                      : 'not-allowed'
+                  }
+                  hover={
+                    lendList.reservation_reservation_status === 4
+                      ? '100%'
+                      : lendList.reservation_reservation_status === 2
+                      ? '50%'
+                      : '80%'
+                  }
+                  opacity={
+                    lendList.reservation_reservation_status === 2
+                      ? '50%'
+                      : '100%'
+                  }
+                  postId={lendList.posts_id}
+                  img_urls={lendList.posts_img_urls.split(',')}
+                  address={lendList.posts_address}
+                  title={lendList.posts_title}
+                  deposit={lendList.posts_deposit}
+                  rental_fee={lendList.posts_rental_fee}
+                  reservation_dates={lendList.reservation_reservation_dates}
+                  onButtonClick={() =>
+                    onButtonClick(
+                      lendList.reservation_id,
+                      lendList.reservation_reservation_status,
+                      lendList.reservation_users_id,
+                    )
+                  }
+                />
+              ))}
+            </section>
+          )}
       </div>
     </>
   );

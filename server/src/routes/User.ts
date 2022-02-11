@@ -1,4 +1,4 @@
-import express from 'express';
+import * as express from 'express';
 const router = express.Router();
 import signupController from '../controllers/user/Signup';
 import loginController from '../controllers/user/Login';
@@ -19,4 +19,4 @@ router.post('/kakao', kakaoController.token);
 router.get('/google', googleController.getUserInfo);
 router.post('/google', googleController.token);
 
-export = router;
+export default router;

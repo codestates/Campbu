@@ -2,10 +2,10 @@ import { Request, Response } from 'express';
 import axios from 'axios';
 import { getRepository } from 'typeorm';
 import { posts } from '../../entity/posts';
-import { users } from '../../entity/users';
+import users from '../../entity/users';
 import { authorizeToken } from '../jwt/AuthorizeToken';
 
-export = async (req: Request, res: Response) => {
+export default async (req: Request, res: Response) => {
   interface postType {
     category: string;
     deposit: number;

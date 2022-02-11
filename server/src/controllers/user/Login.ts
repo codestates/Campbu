@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { getRepository } from 'typeorm';
-import { users } from '../../entity/users';
+import users from '../../entity/users';
 import { likes } from '../../entity/likes';
 import { generateToken } from '../jwt/GenerateToken';
 
@@ -9,7 +9,7 @@ interface loginType {
   password: string;
 }
 
-export default async (req: Request, res: Response) => {
+export = async (req: Request, res: Response) => {
   const { email, password }: loginType = req.body;
   const usersRepository = getRepository(users);
   const likesRepository = getRepository(likes);

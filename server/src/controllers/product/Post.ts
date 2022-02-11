@@ -1,6 +1,6 @@
 import { Request, response, Response } from 'express';
 import { posts } from '../../entity/posts';
-import { users } from '../../entity/users';
+import users from '../../entity/users';
 import { users_reviews } from '../../entity/users_reviews';
 import { reservation } from '../../entity/reservation';
 import { getRepository } from 'typeorm';

@@ -8,7 +8,7 @@ import {
   JoinColumn,
   OneToMany,
 } from 'typeorm';
-import { users } from './users';
+import users from './users';
 import { posts } from './posts';
 import { chats } from './chats';
 

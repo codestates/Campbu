@@ -11,4 +11,4 @@ router.get('/product/post', productController.post);
 router.patch('/account', accountController.patch);
 router.delete('/account', accountController.delete);
 
-export = router;
+export default router;

@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { getRepository } from 'typeorm';
 import { reservation } from '../../entity/reservation';
-import { users } from '../../entity/users';
+import users from '../../entity/users';
 import { authorizeToken } from '../jwt/AuthorizeToken';
 
 export default {

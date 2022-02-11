@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { getRepository } from 'typeorm';
 import { posts } from '../../entity/posts';
-import { users } from '../../entity/users';
+import users from '../../entity/users';
 import { users_reviews } from '../../entity/users_reviews';
 import { authorizeToken } from '../jwt/AuthorizeToken';
 import axios from 'axios';

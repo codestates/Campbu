@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { getRepository } from 'typeorm';
-import { users } from '../../entity/users';
+import users from '../../entity/users';
 import { users_reviews } from '../../entity/users_reviews';
 import { reviews } from '../../entity/reviews';
 import { authorizeToken } from '../jwt/AuthorizeToken';

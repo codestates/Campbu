@@ -7,7 +7,7 @@ import {
   JoinColumn,
   Column,
 } from 'typeorm';
-import { users } from './users';
+import users from './users';
 import { posts } from './posts';
 
 @Entity()

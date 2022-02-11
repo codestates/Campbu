@@ -1,10 +1,10 @@
 import axios from 'axios';
 import { Request, Response } from 'express';
 import { getRepository } from 'typeorm';
-import { users } from '../../entity/users';
+import users from '../../entity/users';
 import { likes } from '../../entity/likes';
 import { generateToken } from '../jwt/GenerateToken';
-import dotenv from 'dotenv';
+import * as dotenv from 'dotenv';
 dotenv.config();
 
 export default {

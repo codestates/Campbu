@@ -7,4 +7,4 @@ router.get('/:postId', post.get);
 router.post('/newpost', newpost);
 router.patch('/:postId', post.patch);
 
-export = router;
+export default router;

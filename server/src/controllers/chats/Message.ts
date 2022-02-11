@@ -4,7 +4,7 @@ import { reservation } from '../../entity/reservation';
 import { posts } from '../../entity/posts';
 import { getRepository } from 'typeorm';
 
-export = async (req: Request, res: Response) => {
+export default async (req: Request, res: Response) => {
   const id: number = Number(req.params.roomId);
   const chatRepository = getRepository(chats);
   const chat = await chatRepository

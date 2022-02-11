@@ -1,10 +1,10 @@
 import { Request, Response } from 'express';
 import { authorizeToken } from '../jwt/AuthorizeToken';
 import { chats } from '../../entity/chats';
-import { users } from '../../entity/users';
+import users from '../../entity/users';
 import { getRepository } from 'typeorm';
 
-export = async (req: Request, res: Response) => {
+export default async (req: Request, res: Response) => {
   const decoded = await authorizeToken(req, res);
   const userRepository = await getRepository(users);
   const user = await userRepository.findOne({ email: decoded.email });

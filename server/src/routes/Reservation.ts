@@ -7,4 +7,4 @@ router.post('', reservation);
 router.patch('/:reservationId', reservationId.patch);
 router.delete('/:reservationId', reservationId.delete);
 
-export = router;
+export default router;

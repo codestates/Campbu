@@ -7,4 +7,4 @@ router.get('/address/:addressId', address);
 router.get('/post/:postId', post.get);
 router.delete('/post/:postId', post.delete);
 
-export = router;
+export default router;

@@ -1,0 +1,23 @@
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+var express_1 = __importDefault(require("express"));
+var router = express_1.default.Router();
+var User_1 = __importDefault(require("./User"));
+var Userinfo_1 = __importDefault(require("./Userinfo"));
+var Post_1 = __importDefault(require("./Post"));
+var Product_1 = __importDefault(require("./Product"));
+var Reservation_1 = __importDefault(require("./Reservation"));
+var Socket_1 = __importDefault(require("../controllers/chats/Socket"));
+var Chat_1 = __importDefault(require("./Chat"));
+var NewUrl_1 = __importDefault(require("../controllers/aws/NewUrl"));
+router.use('/user', User_1.default);
+router.use('/userinfo', Userinfo_1.default);
+router.use('/post', Post_1.default);
+router.use('/product', Product_1.default);
+router.use('/reservation', Reservation_1.default);
+router.use('/socket.io', Socket_1.default);
+router.use('/chat', Chat_1.default);
+router.use('/newurl', NewUrl_1.default);
+module.exports = router;
