@@ -72,10 +72,7 @@ module.exports = function (req, res) { return __awaiter(void 0, void 0, void 0, 
                 likesId = likesInfo.map(function (el) {
                     return el.posts_id;
                 });
-                return [2 /*return*/, res
-                        .status(200)
-                        .cookie('jwt', token, { httpOnly: true })
-                        .json({ user: userInfo, likes: likesId })];
+                return [2 /*return*/, res.status(200).json({ user: userInfo, likes: likesId, token: token })];
             case 5: return [2 /*return*/, res.status(404).json({ message: 'User not exists' })];
         }
     });

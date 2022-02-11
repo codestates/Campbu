@@ -24,7 +24,6 @@ interface Resists {
 
 function ResistList() {
   const [resistLists, setResistLists] = useState<Resists>({ post: [] });
-  const [modalShow, setModalShow] = useState(false);
   const token = useRecoilValue(jwtToken);
 
   useEffect(() => {

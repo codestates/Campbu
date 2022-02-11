@@ -72,6 +72,8 @@ function BorrowList() {
     setConfirm(true);
   };
 
+  console.log('렌더링');
+
   const onCompleteClick = () => {
     setComplete(false);
     if (reservationStatus === 2) {
@@ -156,9 +158,10 @@ function BorrowList() {
             onClick={onReviewCompleteClick}
           />
         )}
-        {borrowLists['borrow'][0]?.reservation_id === 0 ? (
+        {borrowLists['borrow'][0].reservation_id === 0 && (
           <div style={{ height: `${rem(1000)}` }} />
-        ) : borrowLists['borrow'].length === 0 ? (
+        )}
+        {borrowLists['borrow'].length === 0 && (
           <div style={{ padding: `${rem(100)} 0` }}>
             <img src={emptyBorrow} alt="camping" />
             <p css={message}>
@@ -179,56 +182,58 @@ function BorrowList() {
               />
             </Link>
           </div>
-        ) : (
-          <section css={section}>
-            {borrowLists['borrow'].map((borrowList: List, index: number) => (
-              <Reservation
-                key={index}
-                text={printStatusText(
-                  borrowList.reservation_reservation_status,
-                )}
-                background={
-                  borrowList.reservation_reservation_status !== 4
-                    ? color.point
-                    : color.mid
-                }
-                color="white"
-                cursor={
-                  borrowList.reservation_reservation_status === 1 ||
-                  borrowList.reservation_reservation_status === 2
-                    ? 'pointer'
-                    : 'not-allowed'
-                }
-                hover={
-                  borrowList.reservation_reservation_status === 4
-                    ? '100%'
-                    : borrowList.reservation_reservation_status === 3
-                    ? '50%'
-                    : '80%'
-                }
-                opacity={
-                  borrowList.reservation_reservation_status === 3
-                    ? '50%'
-                    : '100%'
-                }
-                postId={borrowList.posts_id}
-                img_urls={borrowList.posts_img_urls.split(',')}
-                address={borrowList.posts_address}
-                title={borrowList.posts_title}
-                deposit={borrowList.posts_deposit}
-                rental_fee={borrowList.posts_rental_fee}
-                reservation_dates={borrowList.reservation_reservation_dates}
-                onButtonClick={() =>
-                  onButtonClick(
-                    borrowList.reservation_id,
-                    borrowList.reservation_reservation_status,
-                    borrowList.posts_users_id,
-                  )
-                }
-              />
-            ))}
-          </section>
         )}
+        {borrowLists.borrow.length !== 0 &&
+          borrowLists.borrow[0].reservation_id !== 0 && (
+            <section css={section}>
+              {borrowLists['borrow'].map((borrowList: List, index: number) => (
+                <Reservation
+                  key={index}
+                  text={printStatusText(
+                    borrowList.reservation_reservation_status,
+                  )}
+                  background={
+                    borrowList.reservation_reservation_status !== 4
+                      ? color.point
+                      : color.mid
+                  }
+                  color="white"
+                  cursor={
+                    borrowList.reservation_reservation_status === 1 ||
+                    borrowList.reservation_reservation_status === 2
+                      ? 'pointer'
+                      : 'not-allowed'
+                  }
+                  hover={
+                    borrowList.reservation_reservation_status === 4
+                      ? '100%'
+                      : borrowList.reservation_reservation_status === 3
+                      ? '50%'
+                      : '80%'
+                  }
+                  opacity={
+                    borrowList.reservation_reservation_status === 3
+                      ? '50%'
+                      : '100%'
+                  }
+                  postId={borrowList.posts_id}
+                  img_urls={borrowList.posts_img_urls.split(',')}
+                  address={borrowList.posts_address}
+                  title={borrowList.posts_title}
+                  deposit={borrowList.posts_deposit}
+                  rental_fee={borrowList.posts_rental_fee}
+                  reservation_dates={borrowList.reservation_reservation_dates}
+                  onButtonClick={() =>
+                    onButtonClick(
+                      borrowList.reservation_id,
+                      borrowList.reservation_reservation_status,
+                      borrowList.posts_users_id,
+                    )
+                  }
+                />
+              ))}
+            </section>
+          )}
       </div>
     </>
   );

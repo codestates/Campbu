@@ -125,10 +125,7 @@ exports.default = {
                                 })];
                         case 4:
                             userInfo_1 = _a.sent();
-                            return [2 /*return*/, res
-                                    .status(201)
-                                    .cookie('jwt', accessToken, { httpOnly: true })
-                                    .json({ user: userInfo_1 })];
+                            return [2 /*return*/, res.status(201).json({ user: userInfo_1, token: accessToken })];
                         case 5: return [4 /*yield*/, usersRepository.update({
                                 email: email,
                             }, { nickname: nickname, users_img: users_img })];
@@ -156,8 +153,7 @@ exports.default = {
                             });
                             return [2 /*return*/, res
                                     .status(200)
-                                    .cookie('jwt', accessToken, { httpOnly: true })
-                                    .json({ user: userInfo_2, likes: likesId })];
+                                    .json({ user: userInfo_2, likes: likesId, token: accessToken })];
                     }
                 });
             }); });
