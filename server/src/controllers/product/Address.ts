@@ -63,7 +63,7 @@ export = async (req: Request, res: Response) => {
         .where('post.id IN (:...ids)', { ids: nearbyProductId })
         .getMany();
 
-      if (req.cookies.jwt) {
+      if (req.headers.authorization !== 'Bearer') {
         const decoded = await authorizeToken(req, res);
         const userRepository = await getRepository(users);
         const userId = await userRepository
