@@ -240,7 +240,7 @@ export const allChatRoomId = atom<string>({
 //? 선택된 카테고리
 export const selectCategory = atom<string>({
   key: 'selectCategory',
-  default: 'all',
+  default: '전체',
 });
 
 //? navbarOn/Off
