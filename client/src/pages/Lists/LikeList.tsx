@@ -26,7 +26,6 @@ interface Likes {
 
 function LikeList() {
   const [likeLists, setLikeLists] = useState<Likes>({ like: [] });
-  const [modalShow, setModalShow] = useState(false);
   const token = useRecoilValue(jwtToken);
 
   useEffect(() => {

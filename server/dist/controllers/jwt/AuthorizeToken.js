@@ -60,10 +60,11 @@ var jwt = require('jsonwebtoken');
 var dotenv = __importStar(require("dotenv"));
 dotenv.config();
 function authorizeToken(req, res) {
+    var _a;
     return __awaiter(this, void 0, void 0, function () {
         var JWT, data;
-        return __generator(this, function (_a) {
-            JWT = req.cookies.jwt;
+        return __generator(this, function (_b) {
+            JWT = (_a = req.headers.authorization) === null || _a === void 0 ? void 0 : _a.split(' ')[1];
             data = jwt.verify(JWT, process.env.JWT_SECRET, function (err, decoded) {
                 if (err) {
                     return res.status(403).json({ message: 'Invalid Accesstoken' });

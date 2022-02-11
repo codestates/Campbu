@@ -93,8 +93,8 @@ export const reviews: { id: number; review: string }[] = [
   { id: 12, review: '욕설 등의 비매너' },
 ];
 
-
-export const host = 'https://campbuserver.cf';
+export const host = 'https://localhost:5050/';
+// export const host = 'https://campbuserver.cf/';
 
 //주소요청 API
 export const addressAPI = `U01TX0FVVEgyMDIyMDExMDIxMjMzNTExMjExNzA=`;
