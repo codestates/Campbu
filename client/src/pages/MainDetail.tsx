@@ -148,7 +148,6 @@ const profileImgStyle = css`
   height: ${rem(48)};
   object-fit: cover;
 `;
-
 //요청 결과 예시 데이터
 let dummyData = {
   posts: {
@@ -297,6 +296,7 @@ function DetailView() {
         })
         .catch((err) => console.log(err));
     }
+
     setStart('');
     setEnd('');
   }, [postId, setEnd, setStart, setUnableDates]);
@@ -339,6 +339,7 @@ function DetailView() {
     } else {
       setShowLoginModal(true);
     }
+    setTotalRentalDates([]);
   };
 
   const urlnums = postInfo.posts.img_urls.length;
@@ -627,11 +628,13 @@ function DetailView() {
 
               {totalRentalDates.length > 0 ? (
                 <>
-                  <span
-                    style={{ color: `#b8b8b8` }}
-                  >{`${postInfo.posts.rental_fee.toLocaleString('ko-KR')} × ${
-                    totalRentalDates.length - 1
-                  }박 ${totalRentalDates.length}일`}</span>
+                  {start && end ? (
+                    <span
+                      style={{ color: `#b8b8b8` }}
+                    >{`${postInfo.posts.rental_fee.toLocaleString('ko-KR')} × ${
+                      totalRentalDates.length - 1
+                    }박 ${totalRentalDates.length}일`}</span>
+                  ) : null}
                   <span>{` ${(
                     postInfo.posts.rental_fee *
                     (totalRentalDates.length - 1)
@@ -653,11 +656,15 @@ function DetailView() {
               ]}
             >
               <span>총 합계 </span>
-              <span>{` ${(
-                postInfo.posts.rental_fee *
-                  (totalRentalDates ? totalRentalDates.length : 1) +
-                postInfo.posts.deposit
-              ).toLocaleString('ko-KR')} 원`}</span>
+              <span>
+                {start && end
+                  ? ` ${(
+                      postInfo.posts.rental_fee *
+                        (totalRentalDates ? totalRentalDates.length - 1 : 1) +
+                      postInfo.posts.deposit
+                    ).toLocaleString('ko-KR')} 원`
+                  : `원`}
+              </span>
             </div>
             <div
               css={css`

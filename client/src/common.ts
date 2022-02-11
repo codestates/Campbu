@@ -96,7 +96,7 @@ export const reviews: { id: number; review: string }[] = [
 
 export const host = 'https://campbuserver.cf';
 
-//주소요청 API
+
 export const addressAPI = `U01TX0FVVEgyMDIyMDExMDIxMjMzNTExMjExNzA=`;
 
 export type reviewsType = {
@@ -150,8 +150,8 @@ export function deleteS3Img(url: string) {
   const key = divUrl[divUrl.length - 1];
   s3.deleteObject(
     {
-      Bucket: bucketName, // 사용자 버켓 이름
-      Key: key, // 버켓 내 경로
+      Bucket: bucketName,
+      Key: key,
     },
     (err, data) => {
       if (err) {

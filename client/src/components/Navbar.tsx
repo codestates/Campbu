@@ -93,9 +93,7 @@ function Navbar() {
   }, [setSelectAddress]);
   useEffect(() => {
     const category = localStorage.getItem('category');
-    if (!category) {
-      setSelectCategory('All');
-    } else {
+    if (category) {
       setSelectCategory(category);
     }
   }, [setSelectCategory]);
